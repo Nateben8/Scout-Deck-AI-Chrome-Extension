@@ -1,0 +1,28 @@
+{
+  "name": "scoutdeck-ai-extension",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ScoutDeck AI Chrome Extension (MV3)",
+  "license": "UNLICENSED",
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint . --ext .js,.json --max-warnings=0",
+    "validate": "node scripts/validate-manifest.mjs",
+    "zip": "bash scripts/zip.sh",
+    "dev:server": "node server/index.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.18.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.8.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-json-format": "^2.0.1",
+    "prettier": "^3.3.3",
+    "prisma": "^5.18.0"
+  }
+} 

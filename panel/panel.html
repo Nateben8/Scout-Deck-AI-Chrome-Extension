@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ScoutDeck Panel</title>
+  <link rel="icon" href="../icons/48.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="../icons/128.png" type="image/png" sizes="any" />
+  <link rel="shortcut icon" href="../icons/48.png" type="image/png" />
+  <link rel="apple-touch-icon" href="../icons/128.png" />
+  <link rel="stylesheet" href="panel.css" />
+</head>
+<body>
+  <header class="sdai-header">
+          <div class="logo-section">
+        <div class="logo">
+          <img src="../icons/48.png" alt="ScoutDeck.ai Logo" class="logo-img" width="28" height="28" />
+          <span class="logo-text">ScoutDeck.ai</span>
+        </div>
+        <div class="play-info">Analyzing Play <span id="playLabel">(Set Play #)</span></div>
+      </div>
+    <div class="step-indicator">
+      <span id="currentStepNumber">1</span> of <span id="totalSteps">10</span>
+    </div>
+    <a id="profileTab" class="profile-tab" href="#">Profile</a>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="progress-text" id="progressText">0%</div>
+  </div>
+
+  <div class="save-indicator" id="saveIndicator">Saved</div>
+
+  <main class="sdai-main" id="stepsRoot">
+    <!-- Step 0: Play Number -->
+    <div class="funnel-step" data-step="0">
+      <div class="step-header">
+        <h2>🎯 Play Number</h2>
+        <p class="step-description">Set the play number for this analysis</p>
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="manualPlay">Play #</label>
+          <input id="manualPlay" type="number" min="1" value="1" placeholder="e.g., 1" />
+        </div>
+      </div>
+
+      <div class="radio-group">
+        <label class="radio-label">Which side are you analyzing?</label>
+        <div class="radio-options">
+          <label class="radio-option">
+            <input type="radio" name="filmSide" value="Offense" checked />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Offense</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="filmSide" value="Defense" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Defense</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1: Basic Play Information (Offense) -->
+    <div class="funnel-step side-offense" data-step="1" style="display: none;">
+      <div class="step-header">
+        <h2>📋 Basic Play Information</h2>
+        <p class="step-description">Let's start with the fundamental details of this play</p>
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="down">Down</label>
+          <select id="down">
+            <option value="">Select down</option>
+            <option value="1">1st</option>
+            <option value="2">2nd</option>
+            <option value="3">3rd</option>
+            <option value="4">4th</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="distance">Distance</label>
+          <input id="distance" type="number" placeholder="e.g., 10" />
+        </div>
+        
+        <div class="form-group">
+          <label for="yardLine">Yard Line</label>
+          <input id="yardLine" type="number" placeholder="e.g., 45" />
+        </div>
+        
+        <div class="form-group">
+          <label for="quarter">Quarter</label>
+          <select id="quarter">
+            <option value="">Select quarter</option>
+            <option value="1">1st Quarter</option>
+            <option value="2">2nd Quarter</option>
+            <option value="3">3rd Quarter</option>
+            <option value="4">4th Quarter</option>
+            <option value="OT">Overtime</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="result">Result of Play</label>
+          <select id="result">
+            <option value="">Select result</option>
+            <option value="Touchdown">Touchdown</option>
+            <option value="Field Goal">Field Goal</option>
+            <option value="Extra Point">Extra Point</option>
+            <option value="Two Point Conversion">Two Point Conversion</option>
+            <option value="Safety">Safety</option>
+            <option value="Punt">Punt</option>
+            <option value="Interception">Interception</option>
+            <option value="Fumble">Fumble</option>
+            <option value="Sack">Sack</option>
+            <option value="Incomplete Pass">Incomplete Pass</option>
+            <option value="First Down">First Down</option>
+            <option value="Turnover on Downs">Turnover on Downs</option>
+            <option value="Blocked Kick">Blocked Kick</option>
+            <option value="Penalty">Penalty</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div id="resultOtherBlock" class="form-group hidden">
+          <label for="resultOther">Specify Other Result</label>
+          <input id="resultOther" type="text" placeholder="Describe the result" />
+        </div>
+      </div>
+      
+      <div class="radio-group">
+        <label class="radio-label">Hash Position</label>
+        <div class="radio-options">
+          <label class="radio-option">
+            <input type="radio" name="hash" value="Left" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Left</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="hash" value="Middle" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Middle</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="hash" value="Right" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Right</span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="radio-group">
+        <label class="radio-label">Play Type</label>
+        <div class="radio-options">
+          <label class="radio-option">
+            <input type="radio" name="playType" value="Run" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Run</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="playType" value="Pass" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Pass</span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="radio-group">
+        <label class="radio-label">RPO or Play Action</label>
+        <div class="radio-options">
+          <label class="radio-option">
+            <input type="radio" name="rpoPa" value="RPO" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">RPO</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="rpoPa" value="Play Action" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Play Action</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="rpoPa" value="N/A" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">N/A</span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="radio-group">
+        <label class="radio-label">Trick Play</label>
+        <div class="radio-options">
+          <label class="radio-option">
+            <input type="radio" name="trick" value="Yes" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Yes</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="trick" value="No" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">No</span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="motion">Motion used? (Y/N – Jet, Orbit, Return, TE Shift, RB Flex, etc.)</label>
+        <select id="motion">
+          <option value="">Select motion</option>
+          <option value="No">No Motion</option>
+          <option value="Jet">Jet</option>
+          <option value="Orbit">Orbit</option>
+          <option value="Return">Return</option>
+          <option value="TE Shift">TE Shift</option>
+          <option value="RB Flex">RB Flex</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      
+      <div id="motionSubtype" class="form-grid hidden">
+        <div class="form-group">
+          <label for="motionType">Motion Type</label>
+          <select id="motionType">
+            <option value="">Select type</option>
+            <option value="Jet">Jet</option>
+            <option value="Orbit">Orbit</option>
+            <option value="Return">Return</option>
+            <option value="TE Shift">TE Shift</option>
+            <option value="RB Flex">RB Flex</option>
+          </select>
+        </div>
+        <div id="motionOtherBlock" class="form-group hidden">
+          <label for="motionOther">Other Motion Type</label>
+          <input id="motionOther" type="text" placeholder="Describe the motion type" />
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <!-- Step 2: Formations & Coverage (Offense) -->
+    <div class="funnel-step side-offense" data-step="2" style="display: none;">
+      <div class="step-header">
+        <h2>🔹 Formations & Coverage</h2>
+        <p class="step-description">Analyze the offensive and defensive alignments</p>
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="offForm">Offensive Formation</label>
+          <select id="offForm">
+            <option value="">Select formation</option>
+            <option value="2x2">2x2</option>
+            <option value="3x1">3x1</option>
+            <option value="1x3">1x3</option>
+            <option value="Bunch">Bunch</option>
+            <option value="Empty">Empty</option>
+            <option value="I-Formation">I-Formation</option>
+            <option value="Single Back">Single Back</option>
+            <option value="Shotgun">Shotgun</option>
+            <option value="Pistol">Pistol</option>
+            <option value="Wildcat">Wildcat</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div id="offFormOtherBlock" class="form-group hidden">
+          <label for="offFormOther">Specify Other Offensive Formation</label>
+          <input id="offFormOther" type="text" placeholder="Describe the formation" />
+        </div>
+        
+        <div class="form-group">
+          <label for="defFront">Defensive Front / Structure</label>
+          <select id="defFront">
+            <option value="">Select front</option>
+            <option value="3-3-5">3-3-5</option>
+            <option value="4-2-5">4-2-5</option>
+            <option value="4-3">4-3</option>
+            <option value="3-4">3-4</option>
+            <option value="5-2">5-2</option>
+            <option value="6-1">6-1</option>
+            <option value="4-4">4-4</option>
+            <option value="3-3">3-3</option>
+            <option value="Dime">Dime</option>
+            <option value="Nickel">Nickel</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div id="defFrontOtherBlock" class="form-group hidden">
+          <label for="defFrontOther">Specify Other Defensive Front</label>
+          <input id="defFrontOther" type="text" placeholder="Describe the front" />
+        </div>
+        
+        <div class="form-group">
+          <label for="frontType">Front Type</label>
+          <select id="frontType">
+            <option value="">Select type</option>
+            <option value="Odd">Odd</option>
+            <option value="Even">Even</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="baseShell">Base Coverage Shell</label>
+          <select id="baseShell">
+            <option value="">Select coverage</option>
+            <option value="Cover 0">Cover 0</option>
+            <option value="1">Cover 1</option>
+            <option value="2 Man">Cover 2 Man</option>
+            <option value="2 Zone">Cover 2 Zone</option>
+            <option value="3">Cover 3</option>
+            <option value="4">Cover 4</option>
+            <option value="Mixed">Mixed</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="manZone">Man or Zone Coverage</label>
+          <select id="manZone">
+            <option value="">Select type</option>
+            <option value="Man">Man</option>
+            <option value="Zone">Zone</option>
+            <option value="Mixed">Mixed</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="covAdj">Coverage Adjustment vs Formations</label>
+        <textarea id="covAdj" rows="3" placeholder="Describe any coverage adjustments..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="alignAdj">Alignment Adjustments to Motion/Shift</label>
+        <textarea id="alignAdj" rows="3" placeholder="Describe alignment adjustments..."></textarea>
+      </div>
+    </div>
+
+    <!-- Step 3: Alignment & Leverage (Offense) -->
+    <div class="funnel-step side-offense" data-step="3" style="display: none;">
+      <div class="step-header">
+        <h2>🔹 Alignment & Leverage</h2>
+        <p class="step-description">Analyze the positioning and leverage of coverage players</p>
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="levSaf">Safeties Leverage</label>
+          <select id="levSaf">
+            <option value="">Select leverage</option>
+            <option value="Inside">Inside</option>
+            <option value="Outside">Outside</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="levCor">Corners Leverage</label>
+          <select id="levCor">
+            <option value="">Select leverage</option>
+            <option value="Inside">Inside</option>
+            <option value="Outside">Outside</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="levLb">Linebackers Leverage</label>
+          <select id="levLb">
+            <option value="">Select leverage</option>
+            <option value="Inside">Inside</option>
+            <option value="Outside">Outside</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="depSaf">Safeties Depth (yards)</label>
+          <input id="depSaf" type="number" placeholder="e.g., 12" />
+        </div>
+        
+        <div class="form-group">
+          <label for="depCor">Corners Depth (yards)</label>
+          <input id="depCor" type="number" placeholder="e.g., 8" />
+        </div>
+        
+        <div class="form-group">
+          <label for="depLb">Linebackers Depth (yards)</label>
+          <input id="depLb" type="number" placeholder="e.g., 5" />
+        </div>
+      </div>
+      
+      <div class="radio-group">
+        <label class="radio-label">Press or Bail Technique (CBs)</label>
+        <div class="radio-options">
+          <label class="radio-option">
+            <input type="radio" name="pressBail" value="Yes" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Yes</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="pressBail" value="No" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">No</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Box Count & Shell (Offense) -->
+    <div class="funnel-step side-offense" data-step="4" style="display: none;">
+      <div class="step-header">
+        <h2>🔹 Box Count & Shell</h2>
+        <p class="step-description">Count the defensive players in the box and on the field</p>
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="boxLb">Linebackers in the Box</label>
+          <input id="boxLb" type="number" placeholder="e.g., 2" />
+        </div>
+        
+        <div class="form-group">
+          <label for="fieldSaf">Safeties on the Field</label>
+          <input id="fieldSaf" type="number" placeholder="e.g., 2" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: Blitz Behavior (Offense) -->
+    <div class="funnel-step side-offense" data-step="5" style="display: none;">
+      <div class="step-header">
+        <h2>🔹 Blitz Behavior</h2>
+        <p class="step-description">Analyze blitz patterns and defensive pressure</p>
+      </div>
+      
+      <div class="radio-group">
+        <label class="radio-label">Blitz Called</label>
+        <div class="radio-options">
+          <label class="radio-option">
+            <input type="radio" name="blitzCalled" value="Yes" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Yes</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="blitzCalled" value="No" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">No</span>
+          </label>
+        </div>
+      </div>
+      
+      <div id="blitzBlock" class="form-grid hidden">
+        <div class="form-group">
+          <label for="blitzOrigin">Blitz Origin</label>
+          <input id="blitzOrigin" type="text" placeholder="Field / Boundary / Nickel / ILB / Safety" />
+        </div>
+        
+        <div class="form-group">
+          <label for="blitzDropper">Dropper(s) in Zone Blitz</label>
+          <input id="blitzDropper" type="text" placeholder="e.g., DE drops to flat" />
+        </div>
+        
+        <div class="form-group">
+          <label for="blitzVacated">Coverage Vacated</label>
+          <select id="blitzVacated">
+            <option value="">Select coverage</option>
+            <option value="Flat">Flat</option>
+            <option value="Seam">Seam</option>
+            <option value="Middle">Middle</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div id="blitzVacatedOtherBlock" class="form-group hidden">
+          <label for="blitzVacatedOther">Specify Other Coverage</label>
+          <input id="blitzVacatedOther" type="text" placeholder="Describe the coverage" />
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="blitzIndicators">Pre-Snap Blitz Indicators</label>
+          <textarea id="blitzIndicators" rows="3" placeholder="LB creeping, Safety depth, CB peeking"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6: Defensive Line Behavior (Offense) -->
+    <div class="funnel-step side-offense" data-step="6" style="display: none;">
+      <div class="step-header">
+        <h2>🔹 Defensive Line Behavior</h2>
+        <p class="step-description">Analyze D-line techniques and movements</p>
+      </div>
+      
+              <div class="form-group">
+          <label for="runFit">Run Fit Technique</label>
+          <select id="runFit">
+            <option value="">Select technique</option>
+            <option value="Wrong shoulder">Wrong shoulder</option>
+            <option value="Squeeze">Squeeze</option>
+            <option value="Upfield">Upfield</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div id="runFitOtherBlock" class="form-group hidden">
+          <label for="runFitOther">Specify Other Technique</label>
+          <input id="runFitOther" type="text" placeholder="Describe the technique" />
+        </div>
+      
+      <div class="checkbox-group">
+        <label class="checkbox-label">D-Line Movement</label>
+        <div class="checkbox-options">
+          <label class="checkbox-option">
+            <input type="checkbox" value="Stem" class="dlMove" />
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Stem</span>
+          </label>
+          <label class="checkbox-option">
+            <input type="checkbox" value="Stunt" class="dlMove" />
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Stunt</span>
+          </label>
+          <label class="checkbox-option">
+            <input type="checkbox" value="Slant" class="dlMove" />
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Slant</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 7: Scouting & Targeting Insights (Offense) -->
+    <div class="funnel-step side-offense" data-step="7" style="display: none;">
+      <div class="step-header">
+        <h2>🔹 Scouting & Targeting Insights</h2>
+        <p class="step-description">Identify vulnerabilities and targeting opportunities</p>
+      </div>
+      
+      <div class="form-group">
+        <label for="weakDb">Weakest Coverage DB</label>
+        <input id="weakDb" type="text" placeholder="e.g., #23 CB" />
+      </div>
+      
+      <div class="form-group">
+        <label for="vulnCorner">Most Vulnerable Corner</label>
+        <textarea id="vulnCorner" rows="3" placeholder="Describe vulnerabilities..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="targetable">Targetable LB/Safety in Pass Game</label>
+        <textarea id="targetable" rows="3" placeholder="Describe targeting opportunities..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="lbTend">Linebacker Blitz Tendencies</label>
+        <textarea id="lbTend" rows="3" placeholder="Describe blitz patterns..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="covGive">Coverage Giveaways from Stance</label>
+        <textarea id="covGive" rows="3" placeholder="Describe stance indicators..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="condNotes">Conditioning Notes</label>
+        <textarea id="condNotes" rows="3" placeholder="Any conditioning observations..."></textarea>
+      </div>
+    </div>
+
+    <!-- Step 8: Basic Information (Defense) -->
+    <div class="funnel-step side-defense" data-step="8" style="display: none;">
+      <div class="step-header">
+        <h2>📋 Basic Information (Defense)</h2>
+        <p class="step-description">Core details for the offensive play you're defending</p>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_down">Down</label>
+          <select id="def_down">
+            <option value="">Select down</option>
+            <option value="1">1st</option>
+            <option value="2">2nd</option>
+            <option value="3">3rd</option>
+            <option value="4">4th</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="def_distance">Distance</label>
+          <input id="def_distance" type="number" placeholder="e.g., 10" />
+        </div>
+        <div class="form-group">
+          <label for="def_yardLine">Yard Line</label>
+          <input id="def_yardLine" type="number" placeholder="e.g., 45" />
+        </div>
+      </div>
+
+      <div class="radio-group">
+        <label class="radio-label">Hash Position</label>
+        <div class="radio-options">
+          <label class="radio-option">
+            <input type="radio" name="def_hash" value="Left" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Left</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="def_hash" value="Middle" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Middle</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="def_hash" value="Right" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Right</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_gainLossYards">Gain or Loss (Yards)</label>
+          <input id="def_gainLossYards" type="number" placeholder="e.g., 7" />
+        </div>
+        <div class="form-group">
+          <label for="def_playResult">Play Result</label>
+          <select id="def_playResult">
+            <option value="">Select result</option>
+            <option value="1st Down">1st Down</option>
+            <option value="TD">Touchdown</option>
+            <option value="TFL">TFL</option>
+            <option value="INT">Interception</option>
+            <option value="Fumble">Fumble</option>
+            <option value="Punt">Punt</option>
+            <option value="Turnover on Downs">Turnover on Downs</option>
+            <option value="Penalty">Penalty</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div id="def_playResultOtherBlock" class="form-group hidden">
+          <label for="def_playResultOther">Specify Other Result</label>
+          <input id="def_playResultOther" type="text" placeholder="Describe the result" />
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_quarter">Quarter</label>
+          <select id="def_quarter">
+            <option value="">Select quarter</option>
+            <option value="1">1st Quarter</option>
+            <option value="2">2nd Quarter</option>
+            <option value="3">3rd Quarter</option>
+            <option value="4">4th Quarter</option>
+            <option value="OT">Overtime</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="def_playType">Play Type</label>
+          <select id="def_playType">
+            <option value="">Select type</option>
+            <option value="Run">Run</option>
+            <option value="Pass">Pass</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="radio-group">
+        <label class="radio-label">RPO or Play Action?</label>
+        <div class="radio-options">
+          <label class="radio-option">
+            <input type="radio" name="def_rpoPa" value="RPO" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">RPO</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="def_rpoPa" value="Play Action" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Play Action</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="def_rpoPa" value="N/A" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">N/A</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="radio-group">
+        <label class="radio-label">Trick Play</label>
+        <div class="radio-options">
+          <label class="radio-option">
+            <input type="radio" name="def_trick" value="Yes" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Yes</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="def_trick" value="No" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">No</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 9: Formation & Pre-Snap Structure (Defense) -->
+    <div class="funnel-step side-defense" data-step="9" style="display: none;">
+      <div class="step-header">
+        <h2>🔹 Formation & Pre-Snap Structure</h2>
+        <p class="step-description">Offensive structure you're defending</p>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_offForm">Offensive Formation</label>
+          <select id="def_offForm">
+            <option value="">Select formation</option>
+            <option value="2x2">2x2</option>
+            <option value="3x1">3x1</option>
+            <option value="Bunch">Bunch</option>
+            <option value="Empty">Empty</option>
+            <option value="Trips Closed">Trips Closed</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div id="def_offFormOtherBlock" class="form-group hidden">
+          <label for="def_offFormOther">Specify Other Offensive Formation</label>
+          <input id="def_offFormOther" type="text" placeholder="Describe the formation" />
+        </div>
+
+        <div class="form-group">
+          <label for="def_personnel">Personnel Grouping</label>
+          <select id="def_personnel">
+            <option value="">Select grouping</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div id="def_personnelOtherBlock" class="form-group hidden">
+          <label for="def_personnelOther">Specify Other Personnel</label>
+          <input id="def_personnelOther" type="text" placeholder="Describe grouping" />
+        </div>
+
+        <div class="form-group">
+          <label for="def_formStrength">Formation Strength</label>
+          <select id="def_formStrength">
+            <option value="">Select strength</option>
+            <option value="Boundary">Boundary</option>
+            <option value="Field">Field</option>
+            <option value="Balanced">Balanced</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_motion">Motion Used</label>
+          <select id="def_motion">
+            <option value="">Select motion</option>
+            <option value="No">No</option>
+            <option value="Jet">Jet</option>
+            <option value="Orbit">Orbit</option>
+            <option value="Return">Return</option>
+            <option value="TE Shift">TE Shift</option>
+            <option value="RB Flex">RB Flex</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div id="def_motionOtherBlock" class="form-group hidden">
+          <label for="def_motionOther">Other Motion Type</label>
+          <input id="def_motionOther" type="text" placeholder="Describe motion" />
+        </div>
+
+        <div class="form-group">
+          <label for="def_qbAlign">QB Alignment</label>
+          <select id="def_qbAlign">
+            <option value="">Select alignment</option>
+            <option value="Under Center">Under Center</option>
+            <option value="Shotgun">Shotgun (5–7 yards deep)</option>
+            <option value="Pistol">Pistol (3–4 yards deep)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_rbAlign">RB Alignment</label>
+          <select id="def_rbAlign">
+            <option value="">Select alignment</option>
+            <option value="Offset Left">Offset Left</option>
+            <option value="Offset Right">Offset Right</option>
+            <option value="Pistol">Pistol</option>
+            <option value="Deep">Deep</option>
+            <option value="None">None</option>
+          </select>
+        </div>
+        <div class="radio-group">
+          <label class="radio-label">Multiple RBs on Field?</label>
+          <div class="radio-options">
+            <label class="radio-option">
+              <input type="radio" name="def_multiRb" value="Yes" />
+              <span class="radio-custom"></span>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="def_multiRb" value="No" />
+              <span class="radio-custom"></span>
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="def_rbAlignNotes">Alignment of RBs</label>
+        <input id="def_rbAlignNotes" type="text" placeholder="Split back, offset stack, one inline" />
+      </div>
+
+      <div class="form-group">
+        <label for="def_teAlign">TE Alignment</label>
+        <select id="def_teAlign">
+          <option value="">Select alignment</option>
+          <option value="Inline">Inline</option>
+          <option value="Wing">Wing</option>
+          <option value="Flex">Flex</option>
+          <option value="None">None</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Step 10: Run Game Evaluation (Defense) -->
+    <div class="funnel-step side-defense" data-step="10" style="display: none;">
+      <div class="step-header">
+        <h2>🔹 Run Game Evaluation</h2>
+        <p class="step-description">How the offense runs the ball</p>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_runScheme">Run Scheme</label>
+          <select id="def_runScheme">
+            <option value="">Select scheme</option>
+            <option value="Inside Zone">Inside Zone</option>
+            <option value="Outside Zone">Outside Zone</option>
+            <option value="Duo">Duo</option>
+            <option value="Power">Power</option>
+            <option value="Counter">Counter</option>
+            <option value="Toss">Toss</option>
+            <option value="Draw">Draw</option>
+            <option value="Trap">Trap</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div id="def_runSchemeOtherBlock" class="form-group hidden">
+          <label for="def_runSchemeOther">Specify Other Scheme</label>
+          <input id="def_runSchemeOther" type="text" placeholder="Describe the scheme" />
+        </div>
+
+        <div class="radio-group">
+          <label class="radio-label">Pullers / Lead Blockers</label>
+          <div class="radio-options">
+            <label class="radio-option">
+              <input type="radio" name="def_pullers" value="Yes" />
+              <span class="radio-custom"></span>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="def_pullers" value="No" />
+              <span class="radio-custom"></span>
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_whoPulls">Who Pulls</label>
+          <input id="def_whoPulls" type="text" placeholder="e.g., RG #66, H-back #18" />
+        </div>
+        <div class="form-group">
+          <label for="def_runDirection">Run Direction</label>
+          <select id="def_runDirection">
+            <option value="">Select direction</option>
+            <option value="Left">Left</option>
+            <option value="Right">Right</option>
+            <option value="Middle">Middle</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_prefRunSide">Preferred Run Side</label>
+          <input id="def_prefRunSide" type="text" placeholder="OL # / Strong or Weak Side" />
+        </div>
+        <div class="radio-group">
+          <label class="radio-label">Cutback / Reverse Field Tendency</label>
+          <div class="radio-options">
+            <label class="radio-option">
+              <input type="radio" name="def_cutback" value="Yes" />
+              <span class="radio-custom"></span>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="def_cutback" value="No" />
+              <span class="radio-custom"></span>
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="def_rbStyle">RB Running Style</label>
+        <select id="def_rbStyle">
+          <option value="">Select style</option>
+          <option value="One-Cut">One-Cut</option>
+          <option value="Bounce">Bounce</option>
+          <option value="Vision">Vision</option>
+          <option value="Power">Power</option>
+          <option value="East-West">East-West</option>
+          <option value="Elusive">Elusive</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Step 11: Pass Game Evaluation (Defense) -->
+    <div class="funnel-step side-defense" data-step="11" style="display: none;">
+      <div class="step-header">
+        <h2>🔹 Pass Game Evaluation</h2>
+        <p class="step-description">How the offense throws the ball</p>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_passPro">Pass Protection Scheme</label>
+          <select id="def_passPro">
+            <option value="">Select scheme</option>
+            <option value="Slide">Slide</option>
+            <option value="Full Slide">Full Slide</option>
+            <option value="BOB">BOB</option>
+            <option value="Max Protect">Max Protect</option>
+            <option value="RB Free Release">RB Free Release</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="def_slideDir">Slide Direction</label>
+          <select id="def_slideDir">
+            <option value="">Select direction</option>
+            <option value="Toward RB">Toward RB</option>
+            <option value="Away">Away</option>
+            <option value="None">None</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_rbPassRole">RB Role in Pass Pro</label>
+          <select id="def_rbPassRole">
+            <option value="">Select role</option>
+            <option value="Chip">Chip</option>
+            <option value="Cut">Cut</option>
+            <option value="Full Block">Full Block</option>
+            <option value="Releases">Releases</option>
+            <option value="Missed Assignment">Missed Assignment</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="def_primaryConcept">Primary Passing Concept</label>
+          <input id="def_primaryConcept" type="text" placeholder="Mesh / Cross / Flood / Verts / PA Shot / Boot / Quick / Levels / Drive" />
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="radio-group">
+          <label class="radio-label">Screen Usage</label>
+          <div class="radio-options">
+            <label class="radio-option">
+              <input type="radio" name="def_screenUse" value="Yes" />
+              <span class="radio-custom"></span>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="def_screenUse" value="No" />
+              <span class="radio-custom"></span>
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="def_screenType">Type of Screen</label>
+          <select id="def_screenType">
+            <option value="">Select type</option>
+            <option value="RB">RB</option>
+            <option value="WR">WR</option>
+            <option value="Tunnel">Tunnel</option>
+            <option value="Bubble">Bubble</option>
+            <option value="None">None</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_targetZone">Targeted Zone</label>
+          <select id="def_targetZone">
+            <option value="">Select zone</option>
+            <option value="Flat">Flat</option>
+            <option value="Seam">Seam</option>
+            <option value="Middle">Middle</option>
+            <option value="Deep">Deep</option>
+            <option value="Sideline">Sideline</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="def_targetReceiver">Targeted Receiver (Jersey #)</label>
+          <input id="def_targetReceiver" type="text" placeholder="#10 WR" />
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_qbRead">QB Read Progression</label>
+          <select id="def_qbRead">
+            <option value="">Select behavior</option>
+            <option value="Stares Down">Stares Down</option>
+            <option value="Works Across">Works Across</option>
+            <option value="One-Read">One-Read</option>
+            <option value="RPO Decision">RPO Decision</option>
+          </select>
+        </div>
+        <div class="radio-group">
+          <label class="radio-label">QB Under Pressure</label>
+          <div class="radio-options">
+            <label class="radio-option">
+              <input type="radio" name="def_qbPressure" value="Yes" />
+              <span class="radio-custom"></span>
+              <span class="radio-text">Yes</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="def_qbPressure" value="No" />
+              <span class="radio-custom"></span>
+              <span class="radio-text">No</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="def_qbMobility">QB Mobility Used</label>
+        <select id="def_qbMobility">
+          <option value="">Select usage</option>
+          <option value="Scramble">Scramble</option>
+          <option value="Boot">Boot</option>
+          <option value="Design Run">Design Run</option>
+          <option value="None">None</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Step 12: Personnel & Matchup Scouting (Defense) -->
+    <div class="funnel-step side-defense" data-step="12" style="display: none;">
+      <div class="step-header">
+        <h2>🔹 Personnel & Matchup Scouting</h2>
+        <p class="step-description">Identify OL strengths/weaknesses and pass targets</p>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_topOL">Top Offensive Lineman</label>
+          <input id="def_topOL" type="text" placeholder="Number / Position / Reason" />
+        </div>
+        <div class="form-group">
+          <label for="def_weakOL">Weakest Offensive Lineman</label>
+          <input id="def_weakOL" type="text" placeholder="Number / Position / Reason" />
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_rbEval">RB Evaluation</label>
+          <textarea id="def_rbEval" rows="3" placeholder="Pass Pro / Vision / Contact Balance / Ball Security"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="def_wrBlockEffort">WR Blocking Effort</label>
+          <select id="def_wrBlockEffort">
+            <option value="">Select</option>
+            <option value="Physical">Physical</option>
+            <option value="Soft">Soft</option>
+            <option value="Avoids Contact">Avoids Contact</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="def_wrTips">WRs That Tip Plays or Run Lazy Routes</label>
+          <input id="def_wrTips" type="text" placeholder="List Numbers" />
+        </div>
+        <div class="form-group">
+          <label for="def_wrMotionFreq">WRs Most Frequently Used in Motion</label>
+          <input id="def_wrMotionFreq" type="text" placeholder="List Numbers" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="def_goToReceiver">Go-To Receiver in Pressure Situations</label>
+        <input id="def_goToReceiver" type="text" placeholder="Number / Position / Usage" />
+      </div>
+    </div>
+  </main>
+
+  <div class="funnel-navigation">
+    <button id="prevStep" class="btn btn-outline">← Back</button>
+    <div class="step-dots">
+      <div class="step-dot active" data-step="0"></div>
+      <div class="step-dot" data-step="1"></div>
+      <div class="step-dot" data-step="2"></div>
+      <div class="step-dot" data-step="3"></div>
+      <div class="step-dot" data-step="4"></div>
+      <div class="step-dot" data-step="5"></div>
+      <div class="step-dot" data-step="6"></div>
+      <div class="step-dot" data-step="7"></div>
+    </div>
+    <button id="nextStep" class="btn">Next →</button>
+    <button id="submitPlay" class="btn btn-gold" style="display: none;">Submit Play</button>
+  </div>
+
+  <div class="funnel-actions">
+    <button id="clearForm" class="btn btn-outline">Clear Form</button>
+  </div>
+
+  <!-- Auth Gate Overlay -->
+  <div id="authGate" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); z-index: 9999;">
+    <div style="position: absolute; top: 20%; left: 50%; transform: translateX(-50%); width: 520px; max-width: 92%; background: #fff; border-radius: 16px; box-shadow: 0 12px 30px rgba(0,0,0,0.2); overflow: hidden;">
+      <div style="padding: 20px 24px; background: linear-gradient(135deg, #0F3D91, #174cab); color: #fff; display: flex; align-items: center; gap: 10px;">
+        <img src="../icons/48.png" width="28" height="28" style="background:#fff;border-radius:6px;padding:2px" alt="ScoutDeck" />
+        <div style="font-weight: 700; font-size: 18px;">Sign in to ScoutDeck</div>
+      </div>
+      <div style="padding: 20px 24px; color: #111827;">
+        <p style="margin-top:0">Log in with your ScoutDeck account to continue. Free trial and paid plans supported.</p>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <button id="loginBtn" class="btn" style="padding:10px 14px; background:#0F3D91; color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer;">Sign in</button>
+          <button id="logoutBtn" class="btn btn-outline" style="padding:10px 14px; border-radius:8px;">Log out</button>
+        </div>
+        <div id="authStatus" style="margin-top:12px; font-size:12px; color:#6b7280;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="panel.js"></script>
+  <script src="../utils/auth.js"></script>
+</body>
+</html> 

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get Chrome Extension ID</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0f3d91;
+            margin-bottom: 20px;
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #0f3d91;
+            border-radius: 4px;
+        }
+        .code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        .highlight {
+            background: #fef5e7;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 ScoutDeck AI Extension OAuth Setup</h1>
+        
+        <div class="warning">
+            <strong>⚠️ Important:</strong> You need to add your extension's redirect URI to Google OAuth settings for the login to work.
+        </div>
+
+        <div class="step">
+            <h3>Step 1: Get Your Extension ID</h3>
+            <p>1. Go to <code>chrome://extensions/</code></p>
+            <p>2. Find "ScoutDeck AI" extension</p>
+            <p>3. Copy the <span class="highlight">Extension ID</span> (it looks like: abcdefghijklmnopqrstuvwxyz123456)</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Calculate Your Redirect URI</h3>
+            <p>Your redirect URI will be:</p>
+            <div class="code">
+                https://[YOUR-EXTENSION-ID].chromiumapp.org/extension-auth
+            </div>
+            <p>For example, if your extension ID is <code>abcdefghijklmnopqrstuvwxyz123456</code>, your redirect URI would be:</p>
+            <div class="code">
+                https://abcdefghijklmnopqrstuvwxyz123456.chromiumapp.org/extension-auth
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Add to Google Cloud Console</h3>
+            <p>1. Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank">Google Cloud Console - Credentials</a></p>
+            <p>2. Click on your OAuth 2.0 Client ID</p>
+            <p>3. Under "Authorized redirect URIs", click <strong>+ ADD URI</strong></p>
+            <p>4. Add your extension redirect URI:</p>
+            <div class="code">
+                https://[YOUR-EXTENSION-ID].chromiumapp.org/extension-auth
+            </div>
+            <p>5. Click <strong>Save</strong></p>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Test the Extension</h3>
+            <p>1. Reload your extension in <code>chrome://extensions/</code></p>
+            <p>2. Click the ScoutDeck AI extension icon</p>
+            <p>3. Click "Sign in with Google"</p>
+            <p>4. Complete the OAuth flow - it should now work!</p>
+        </div>
+
+        <div class="warning">
+            <strong>💡 Pro Tip:</strong> If you're still having issues, check the browser console for error messages and make sure your website is running on the correct port.
+        </div>
+    </div>
+</body>
+</html>

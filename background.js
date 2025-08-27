@@ -16,15 +16,22 @@ chrome.action.onClicked.addListener(async (tab) => {
 });
 
 // Authentication with ScoutDeck
-const BASE_URL = "https://scoutdeck.ai";
+const BASE_URL = "https://scoutdeck.ai"; // Production URL
 
 function getRedirectUri() {
   try {
     if (chrome.identity?.getRedirectURL) {
-      return chrome.identity.getRedirectURL('extension-auth');
+      const redirectUri = chrome.identity.getRedirectURL('extension-auth');
+      console.log('🔗 Using chrome.identity.getRedirectURL:', redirectUri);
+      return redirectUri;
     }
-  } catch {}
-  return `https://${chrome.runtime.id}.chromiumapp.org/extension-auth`;
+  } catch (e) {
+    console.warn('⚠️ chrome.identity.getRedirectURL failed:', e);
+  }
+  const fallbackUri = `https://${chrome.runtime.id}.chromiumapp.org/extension-auth`;
+  console.log('🔗 Using fallback redirect URI:', fallbackUri);
+  console.log('📋 Extension ID:', chrome.runtime.id);
+  return fallbackUri;
 }
 
 function parseAuthFromUrl(responseUrl) {
@@ -103,28 +110,51 @@ async function loginWithScoutDeck() {
   const redirectUri = getRedirectUri();
   const issueTokenUrl = `${BASE_URL}/api/extension/issue-token?redirect=${encodeURIComponent(redirectUri)}`;
 
+  console.log('🔐 Starting OAuth flow...');
+  console.log('📍 Redirect URI:', redirectUri);
+  console.log('🌐 Issue Token URL:', issueTokenUrl);
+
   return new Promise((resolve, reject) => {
     try {
       chrome.identity.launchWebAuthFlow(
         { url: issueTokenUrl, interactive: true },
         async (responseUrl) => {
+          console.log('📥 OAuth response received:', responseUrl);
+          
           if (chrome.runtime.lastError) {
-            console.error('WebAuth error:', chrome.runtime.lastError);
+            console.error('❌ WebAuth error:', chrome.runtime.lastError);
             return reject(chrome.runtime.lastError);
           }
-          if (!responseUrl) return reject(new Error("No response URL"));
+          if (!responseUrl) {
+            console.error('❌ No response URL received');
+            return reject(new Error("No response URL"));
+          }
 
           try {
+            console.log('🔍 Parsing tokens from URL...');
             const { accessToken, refreshToken, expiresAtMs } = parseAuthFromUrl(responseUrl);
-            if (!accessToken) return reject(new Error("No access_token in response"));
+            console.log('✅ Tokens parsed:', { 
+              hasAccessToken: !!accessToken, 
+              hasRefreshToken: !!refreshToken, 
+              expiresAtMs 
+            });
+            
+            if (!accessToken) {
+              console.error('❌ No access_token in response');
+              return reject(new Error("No access_token in response"));
+            }
+            
             await saveTokens({ accessToken, refreshToken, expiresAtMs });
+            console.log('💾 Tokens saved successfully');
             resolve(accessToken);
           } catch (err) {
+            console.error('❌ Error parsing tokens:', err);
             return reject(err);
           }
         }
       );
     } catch (err) {
+      console.error('❌ Error launching OAuth flow:', err);
       return reject(err);
     }
   });

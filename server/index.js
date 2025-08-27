@@ -8,6 +8,7 @@ import me from './routes/auth/me.js';
 import upsertPlay from './routes/extension/plays.js';
 import signinPage from './routes/pages/signin.js';
 import signupPage from './routes/pages/signup.js';
+import issueToken from './routes/extension/issue-token.js';
 
 const app = express();
 app.use(cors({ origin: [/^https:\/\/[a-z0-9-]+\.chromiumapp\.org$/, /https:\/\/.*scoutdeck\.ai$/], credentials: false }));
@@ -29,5 +30,8 @@ app.get('/api/extension/me', me);
 // Plays
 app.post('/api/extension/plays', upsertPlay);
 
+// Issue Token (compatibility)
+app.get('/api/extension/issue-token', (req, res) => issueToken(req, res));
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`ScoutDeck API listening on :${PORT}`)); 
+app.listen(PORT, () => console.log(`ScoutDeck API listening on :${PORT}`));

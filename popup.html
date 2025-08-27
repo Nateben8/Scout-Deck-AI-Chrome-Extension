@@ -8,9 +8,35 @@
 </head>
 <body>
   <div class="container">
-    <h1>ScoutDeck AI</h1>
-    <button id="toggleBtn" class="btn">Toggle Sidebar</button>
-    <div id="status" class="status">Ready</div>
+    <div class="header">
+      <img src="icons/48.png" alt="ScoutDeck AI" class="logo" />
+      <h1>ScoutDeck AI</h1>
+    </div>
+    
+    <!-- Authentication Section -->
+    <div id="authSection" class="auth-section">
+      <div id="signedOutView" class="auth-view">
+        <p class="auth-message">Sign in to access ScoutDeck AI features</p>
+        <button id="loginBtn" class="btn btn-primary">Sign in with Google</button>
+        <div id="authStatus" class="auth-status"></div>
+      </div>
+      
+      <div id="signedInView" class="auth-view" style="display: none;">
+        <div class="user-info">
+          <div id="userEmail" class="user-email"></div>
+          <div class="user-actions">
+            <button id="dashboardBtn" class="btn btn-outline">Open Dashboard</button>
+            <button id="logoutBtn" class="btn btn-outline">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main Actions -->
+    <div id="mainActions" class="main-actions" style="display: none;">
+      <button id="toggleBtn" class="btn">Toggle Sidebar</button>
+      <div id="status" class="status">Ready</div>
+    </div>
   </div>
   <script src="popup.js"></script>
 </body>

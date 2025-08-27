@@ -101,7 +101,7 @@ async function fetchWithAuth(path, init = {}) {
 
 async function loginWithScoutDeck() {
   const redirectUri = getRedirectUri();
-  const issueTokenUrl = `${BASE_URL}/signin?redirect=${encodeURIComponent(redirectUri)}`;
+  const issueTokenUrl = `${BASE_URL}/api/extension/issue-token?redirect=${encodeURIComponent(redirectUri)}`;
 
   return new Promise((resolve, reject) => {
     try {

@@ -16,7 +16,7 @@ chrome.action.onClicked.addListener(async (tab) => {
 });
 
 // Authentication with ScoutDeck
-const BASE_URL = "https://scoutdeck.ai"; // Production URL
+const BASE_URL = "https://www.scoutdeck.ai"; // Production URL
 
 function getRedirectUri() {
   try {
